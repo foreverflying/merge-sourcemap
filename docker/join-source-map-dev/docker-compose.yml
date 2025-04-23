@@ -1,0 +1,33 @@
+version: "3"
+services:
+  join-source-map:
+    image: dev-node
+    build:
+      cache_from:
+        - dev-node
+      context: ../dev-node
+      args:
+        NODE_VERSION: 23.9.0
+    environment:
+      - TZ=
+    volumes:
+      - type: bind
+        source: ${GIT_CONFIG_PATH:-~/.gitconfig}
+        target: /home/node/.gitconfig
+        read_only: true
+      - type: bind
+        source: ${SSH_PATH:-~/.ssh}
+        target: /home/node/.ssh
+        read_only: true
+      - type: bind
+        source: ${BASH_ALIASES_PATH:-../res/.bash_aliases}
+        target: /home/node/.bash_aliases
+        read_only: true
+      - type: bind
+        source: ${BASH_ALIASES_PATH:-../res/.bash_aliases}
+        target: /root/.bash_aliases
+        read_only: true
+      - home:/home/node:delegated
+      - ../..:/opt/workspace/join-source-map
+volumes:
+  home:
